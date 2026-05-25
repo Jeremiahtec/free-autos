@@ -6,7 +6,6 @@ export default function Showroom() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch data from our live Express server
     fetch('https://free-autos.onrender.com/api/vehicles')
       .then(async (res) => {
         if (!res.ok) throw new Error(`Server Error: ${res.status}`);
