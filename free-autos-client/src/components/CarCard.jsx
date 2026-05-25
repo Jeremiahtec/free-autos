@@ -46,7 +46,7 @@ export default function CarCard({ car }) {
             </div>
             <div className="flex items-center justify-end">
 <Link 
-  to={`/showroom/${car.id}`}
+  to={`/showroom/${car._id}`}
   className="w-full h-full rounded-lg glass-panel bg-primary-container/10 hover:bg-primary-container hover:text-black text-primary border border-primary-container/30 transition-all duration-300 flex items-center justify-center group/btn"
 >
   <span className="material-symbols-outlined transform group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>

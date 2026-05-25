@@ -1,45 +1,35 @@
+import { useState, useEffect } from 'react';
 import CarCard from '../components/CarCard';
 
-// This mirrors the JSON structure you will eventually get from your Mongoose backend
-const dummyInventory = [
-  {
-    id: 1,
-    make: "Porsche",
-    model: "911 GT3 RS",
-    year: 2024,
-    price: 245000,
-    // Fresh Unsplash link for a dark Porsche
-    image: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=80", 
-    zeroToSixty: "3.0s",
-    hp: 518
-  },
-  {
-    id: 2,
-    make: "McLaren",
-    model: "750S Spider",
-    year: 2024,
-    price: 345000,
-    // Fresh Unsplash link for a sleek supercar
-    image: "https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=800&q=80",
-    zeroToSixty: "2.7s",
-    hp: 740
-  },
-  {
-    id: 3,
-    make: "Aston Martin",
-    model: "DBS Superleggera",
-    year: 2023,
-    price: 335000,
-    // The blue car that was already working
-    image: "https://images.unsplash.com/photo-1603386329225-868f9b1ee6c9?auto=format&fit=crop&w=800&q=80",
-    zeroToSixty: "3.2s",
-    hp: 715
-  }
-];
-
 export default function Showroom() {
+  const [inventory, setInventory] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Fetch data from our live Express server
+    fetch('http://localhost:5000/api/vehicles')
+      .then(async (res) => {
+        if (!res.ok) throw new Error(`Server Error: ${res.status}`);
+        return res.json();
+      })
+      .then(data => {
+        if (Array.isArray(data)) {
+          setInventory(data);
+        } else {
+          setInventory([]); 
+        }
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error("Error fetching vehicles:", err);
+        setInventory([]); 
+        setLoading(false);
+      });
+  }, []);
+
   return (
     <main className="pt-32 pb-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto flex-grow w-full">
+      
       {/* Header & Filters */}
       <div className="mb-16">
         <h1 className="font-headline-lg-mobile text-headline-lg-mobile md:font-display-lg md:text-display-lg text-on-surface mb-8">Showroom</h1>
@@ -92,18 +82,26 @@ export default function Showroom() {
         </div>
       </div>
 
-      {/* Inventory Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
-        {dummyInventory.map((car) => (
-          <CarCard key={car.id} car={car} />
-        ))}
-      </div>
+      {/* Dynamic Inventory Grid */}
+      {loading ? (
+        <div className="text-center py-20 text-on-surface-variant font-headline-md">
+           Loading High-End Inventory...
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+          {inventory.map((car) => (
+            <CarCard key={car._id} car={car} />
+          ))}
+        </div>
+      )}
 
+      {/* Load More Button */}
       <div className="mt-16 text-center">
         <button className="border border-[#2A2A2A] text-on-surface px-8 py-4 rounded font-label-sm text-label-sm uppercase tracking-wider hover:bg-white/5 transition-colors">
           Load More Inventory
         </button>
       </div>
+
     </main>
   );
 }
