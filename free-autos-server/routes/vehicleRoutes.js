@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Vehicle = require('../models/Vehicle'); // Imports your Mongoose schema
+const { protect } = require('../middleware/authGuard'); // <-- Import the auth guard middleware
 
 // @route   GET /api/vehicles
 // @desc    Get all vehicles for the Showroom
@@ -27,8 +28,8 @@ router.get('/:id', async (req, res) => {
 
 // @route   POST /api/vehicles
 // @desc    Add a new vehicle (Used by the Admin Dashboard)
-router.post('/', async (req, res) => {
-  try {
+router.post('/', protect, async (req, res) => {
+    try {
     const newVehicle = new Vehicle(req.body);
     const savedVehicle = await newVehicle.save();
     res.status(201).json(savedVehicle);

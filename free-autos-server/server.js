@@ -15,7 +15,7 @@ app.use(express.json());
 
 // --- THE NEW "LOUD" DATABASE CONNECTION ---
 mongoose.connect(process.env.MONGO_URI, { 
-  serverSelectionTimeoutMS: 5000 // Forces it to tell us the error in 5 seconds
+  serverSelectionTimeoutMS: 5000 
 })
 .then(() => {
   console.log('🟢 SUCCESSFULLY CONNECTED TO MONGODB.');
@@ -38,7 +38,12 @@ app.get('/api/health', (req, res) => {
 
 // API Routes
 const vehicleRoutes = require('./routes/vehicleRoutes');
+const authRoutes = require('./routes/auth'); 
+const tradeInRoutes = require('./routes/tradeInRoutes'); // <-- NEW: Imported Trade-In Routes
+
 app.use('/api/vehicles', vehicleRoutes);
+app.use('/api/admin', authRoutes); 
+app.use('/api/trade-ins', tradeInRoutes); // <-- NEW: Mounted Trade-In Routes
 
 // Start Server
 app.listen(PORT, () => {

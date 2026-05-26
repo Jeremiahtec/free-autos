@@ -6,6 +6,8 @@ import VehicleDetail from './pages/VehicleDetail';
 import TradeIn from './pages/TradeIn';
 import About from './pages/About';     // <-- Import About
 import Contact from './pages/Contact'; // <-- Import Contact
+import AdminLogin from './pages/AdminLogin';
+import AdminDashboard from './pages/AdminDashboard';
 
 export default function App() {
   return (
@@ -18,6 +20,8 @@ export default function App() {
           <Route path="/trade-in" element={<TradeIn />} />
           <Route path="/about" element={<About />} />       {/* <-- Add About Route */}
           <Route path="/contact" element={<Contact />} />   {/* <-- Add Contact Route */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
         </Route>
       </Routes>
     </BrowserRouter>
